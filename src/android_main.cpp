@@ -38,7 +38,9 @@
 // poll mode
 int thd_poll_interval = 4; //in seconds
 
+#ifdef DETECT_THERMAL_ZONES
 bool thd_ignore_default_control = false;
+#endif
 
 
 // SIGTERM & SIGINT handler
@@ -80,7 +82,9 @@ int main(int argc, char *argv[]) {
 			{ "exclusive-control", no_argument, 0, 'e' },
 			{ "ignore-cpuid-check", no_argument, 0, 'i'},
 			{ "config-file", required_argument, 0, 'c' },
+#ifdef DETECT_THERMAL_ZONES
 			{ "ignore-default-control", no_argument, 0, 'd'},
+#endif
 			{ NULL, 0, NULL, 0 } };
 
 	if (argc > 1) {
@@ -106,9 +110,11 @@ int main(int argc, char *argv[]) {
 			case 'i':
 				ignore_cpuid_check = true;
 				break;
+#ifdef DETECT_THERMAL_ZONES
 			case 'd':
 				thd_ignore_default_control = true;
 				break;
+#endif
 			case 'c':
 				conf_file = optarg;
 				break;
@@ -126,6 +132,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+#ifdef GENERATE_CONFIG
 	if (mkdir(TDRUNDIR, 0755) != 0) {
 		if (errno != EEXIST) {
 			fprintf(stderr, "Cannot create '%s': %s\n", TDRUNDIR,
@@ -133,6 +140,7 @@ int main(int argc, char *argv[]) {
 			exit(EXIT_FAILURE);
 		}
 	}
+#endif
 
 	signal(SIGINT, sig_int_handler);
 	signal(SIGTERM, sig_int_handler);

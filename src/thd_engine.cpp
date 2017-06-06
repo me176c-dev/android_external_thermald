@@ -738,6 +738,7 @@ void cthd_engine::thd_read_default_thermal_sensors() {
 			sensors.size());
 }
 
+#ifdef DETECT_THERMAL_ZONES
 void cthd_engine::thd_read_default_thermal_zones() {
 	DIR *dir;
 	struct dirent *entry;
@@ -771,6 +772,7 @@ void cthd_engine::thd_read_default_thermal_zones() {
 	thd_log_info("thd_read_default_thermal_zones loaded %zu zones \n",
 			zones.size());
 }
+#endif
 
 void cthd_engine::thd_read_default_cooling_devices() {
 
