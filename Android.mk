@@ -38,8 +38,8 @@ LOCAL_C_INCLUDES += external/libxml2/include
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS := \
-		-DTDRUNDIR='"/data/thermal-daemon"'\
-		-DTDCONFDIR='"/system/etc/thermal-daemon"'\
+		-DTDRUNDIR='"/data/thermald"'\
+		-DTDCONFDIR='"/system/etc/thermald"'\
 		-Wno-unused-parameter\
 		-Wall\
 		-Werror
@@ -47,5 +47,5 @@ LOCAL_CFLAGS := \
 LOCAL_STATIC_LIBRARIES := libxml2
 LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libc++ libicuuc libicui18n libbinder libutils
 LOCAL_PRELINK_MODULE := false
-LOCAL_MODULE := thermal-daemon
+LOCAL_MODULE := thermald
 include $(BUILD_EXECUTABLE)
