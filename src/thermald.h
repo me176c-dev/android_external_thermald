@@ -42,7 +42,7 @@
 
 #define LOG_NDEBUG 1
 #undef LOG_TAG
-#define LOG_TAG "THERMALD"
+#define LOG_TAG "thermald"
 #include <utils/Log.h>
 #include <cutils/log.h>
 #include <cutils/properties.h>
