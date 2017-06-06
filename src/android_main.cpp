@@ -151,7 +151,7 @@ static void daemonize(char *rundir, char *pidfile) {
 }
 
 static void print_usage(FILE* stream, int exit_code) {
-	fprintf(stream, "Usage:  thermal-daemon options [ ... ]\n");
+	fprintf(stream, "Usage:  thermald options [ ... ]\n");
 	fprintf(stream, "  --help Display this usage information.\n"
 			"  --version Show version.\n"
 			"  --no-daemon No daemon.\n"
