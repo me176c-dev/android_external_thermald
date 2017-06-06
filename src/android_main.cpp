@@ -38,8 +38,9 @@
 // poll mode
 int thd_poll_interval = 4; //in seconds
 
+#ifdef DETECT_THERMAL_ZONES
 bool thd_ignore_default_control = false;
-
+#endif
 
 // SIGTERM & SIGINT handler
 void sig_int_handler(int signum) {
@@ -121,6 +122,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+#ifdef GENERATE_CONFIG
 	if (mkdir(TDRUNDIR, 0755) != 0) {
 		if (errno != EEXIST) {
 			fprintf(stderr, "Cannot create '%s': %s\n", TDRUNDIR,
@@ -128,6 +130,7 @@ int main(int argc, char *argv[]) {
 			exit(EXIT_FAILURE);
 		}
 	}
+#endif
 
 	signal(SIGINT, sig_int_handler);
 	signal(SIGTERM, sig_int_handler);

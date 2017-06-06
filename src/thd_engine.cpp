@@ -590,6 +590,7 @@ void cthd_engine::thd_engine_reload_zones() {
 	}
 }
 
+#ifndef ANDROID
 // Add any tested platform ids in this table
 static supported_ids_t id_table[] = {
 		{ 6, 0x2a }, // Sandybridge
@@ -610,6 +611,7 @@ static supported_ids_t id_table[] = {
 		{ 6, 0x66 }, // Cannonlake
 		{ 0, 0 } // Last Invalid entry
 };
+#endif
 
 int cthd_engine::check_cpu_id() {
 #ifndef ANDROID
@@ -690,6 +692,7 @@ void cthd_engine::thd_read_default_thermal_sensors() {
 			sensors.size());
 }
 
+#ifdef DETECT_THERMAL_ZONES
 void cthd_engine::thd_read_default_thermal_zones() {
 	DIR *dir;
 	struct dirent *entry;
@@ -723,6 +726,7 @@ void cthd_engine::thd_read_default_thermal_zones() {
 	thd_log_info("thd_read_default_thermal_zones loaded %zu zones \n",
 			zones.size());
 }
+#endif
 
 void cthd_engine::thd_read_default_cooling_devices() {
 
