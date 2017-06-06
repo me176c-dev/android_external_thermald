@@ -26,16 +26,25 @@
 #include <errno.h>
 #include <sys/types.h>
 #include "thd_engine_default.h"
-#include "thd_zone_cpu.h"
 #include "thd_zone_generic.h"
 #include "thd_cdev_gen_sysfs.h"
 #include "thd_cdev_cpufreq.h"
 #include "thd_cdev_rapl.h"
 #include "thd_cdev_intel_pstate_driver.h"
-#include "thd_zone_surface.h"
 #include "thd_cdev_rapl_dram.h"
 #include "thd_sensor_virtual.h"
+
+#ifdef DETECT_THERMAL_ZONES
+#include "thd_zone_cpu.h"
+#endif
+
+#ifdef ACTIVATE_SURFACE
+#include "thd_zone_surface.h"
+#endif
+
+#ifdef BACKLIGHT_COOLING_DEVICE
 #include "thd_cdev_backlight.h"
+#endif
 
 #ifdef GLIB_SUPPORT
 #include "thd_cdev_modem.h"
@@ -69,17 +78,22 @@ cthd_engine_default::~cthd_engine_default() {
 
 int cthd_engine_default::read_thermal_sensors() {
 	int index;
+#ifdef DETECT_THERMAL_ZONES
 	DIR *dir;
 	struct dirent *entry;
+#endif
 	int sensor_mask = 0x0f;
 	cthd_sensor *sensor;
+#ifdef DETECT_THERMAL_ZONES
 	const std::string base_path[] = { "/sys/devices/platform/",
 			"/sys/class/hwmon/" };
+#endif
 	int i;
 
 	thd_read_default_thermal_sensors();
 	index = current_sensor_index;
 
+#ifdef DETECT_THERMAL_ZONES
 	sensor = search_sensor("pkg-temp-0");
 	if (sensor) {
 		// Force this to support async
@@ -162,6 +176,8 @@ int cthd_engine_default::read_thermal_sensors() {
 		thd_log_warn("Thermal DTS: No coretemp sysfs found\n");
 	}
 	current_sensor_index = index;
+#endif
+
 	// Add from XML sensor config
 	if (!parser_init() && parser.platform_matched()) {
 		for (int i = 0; i < parser.sensor_count(); ++i) {
@@ -213,6 +229,7 @@ int cthd_engine_default::read_thermal_sensors() {
 	return THD_SUCCESS;
 }
 
+#ifdef DETECT_THERMAL_ZONES
 bool cthd_engine_default::add_int340x_processor_dev(void)
 {
 	/* Specialized processor thermal device names */
@@ -268,6 +285,7 @@ bool cthd_engine_default::add_int340x_processor_dev(void)
 
 	return false;
 }
+#endif
 
 int cthd_engine_default::read_thermal_zones() {
 	int index;
@@ -277,9 +295,12 @@ int cthd_engine_default::read_thermal_zones() {
 			"/sys/class/hwmon/" };
 	int i;
 
+#ifdef DETECT_THERMAL_ZONES
 	thd_read_default_thermal_zones();
+#endif
 	index = current_zone_index;
 
+#ifdef DETECT_THERMAL_ZONES
 	bool valid_int340x = add_int340x_processor_dev();
 
 	if (!valid_int340x && !search_zone("cpu")) {
@@ -339,6 +360,7 @@ int cthd_engine_default::read_thermal_zones() {
 		}
 	}
 	current_zone_index = index;
+#endif
 
 	// Add from XML thermal zone
 	if (!parser_init() && parser.platform_matched()) {
@@ -631,6 +653,7 @@ int cthd_engine_default::read_cooling_devices() {
 	} else
 		delete rapl_dram_dev;
 
+#ifdef BACKLIGHT_COOLING_DEVICE
 	cthd_cdev *cdev = search_cdev("LCD");
 	if (!cdev) {
 		cthd_cdev_backlight *backlight_dev = new cthd_cdev_backlight(
@@ -642,6 +665,7 @@ int cthd_engine_default::read_cooling_devices() {
 		} else
 			delete backlight_dev;
 	}
+#endif
 
 	// Dump all cooling devices
 	for (unsigned i = 0; i < cdevs.size(); ++i) {
