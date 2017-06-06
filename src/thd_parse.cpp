@@ -30,7 +30,10 @@
 #include <stdlib.h>
 #include <algorithm>
 #include "thd_sys_fs.h"
+
+#ifdef GENERATE_CONFIG
 #include "thd_trt_art_reader.h"
+#endif
 
 #define DEBUG_PARSER_PRINT(x,...)
 
@@ -68,11 +71,14 @@ cthd_parse::cthd_parse() :
 }
 
 int cthd_parse::parser_init(std::string config_file) {
+#ifdef GENERATE_CONFIG
 	cthd_acpi_rel rel;
-	const char *xml_config_file;
 	int ret;
+#endif
+	const char *xml_config_file;
 
 	if (config_file.empty()) {
+#ifdef GENERATE_CONFIG
 		std::ifstream conf_auto(filename_auto_conf.c_str());
 		if (conf_auto.is_open()) {
 			thd_log_warn("Using generated %s \n", filename_auto_conf.c_str());
@@ -86,6 +92,9 @@ int cthd_parse::parser_init(std::string config_file) {
 				xml_config_file = filename.c_str();
 			}
 		}
+#else
+		xml_config_file = filename.c_str();
+#endif
 	} else {
 		xml_config_file = config_file.c_str();
 	}
