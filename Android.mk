@@ -61,4 +61,5 @@ LOCAL_STATIC_LIBRARIES := libxml2
 LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libc++ libicuuc libicui18n libbinder libutils
 LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE := thermald
+LOCAL_INIT_RC := thermald.rc
 include $(BUILD_EXECUTABLE)
