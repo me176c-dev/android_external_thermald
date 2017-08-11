@@ -1,0 +1,5 @@
+service thermald /system/bin/thermald -p 5
+    class core
+    user system
+    group system
+    critical
