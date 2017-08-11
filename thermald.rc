@@ -1,0 +1,4 @@
+service thermald /system/bin/thermald -p 5
+    class core
+    critical
+    seclabel u:r:watchdogd:s0
