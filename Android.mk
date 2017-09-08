@@ -50,10 +50,11 @@ endif
 LOCAL_C_INCLUDES += external/libxml2/include
 
 LOCAL_MODULE_TAGS := optional
-LOCAL_CFLAGS += -DTDRUNDIR='"/data/thermald"' -DTDCONFDIR='"/system/etc/thermald"' -Wno-unused-parameter
+LOCAL_CFLAGS += -DTDRUNDIR='"/data/thermald"' -DTDCONFDIR='"/vendor/etc/thermald"' -Wno-unused-parameter
 LOCAL_STATIC_LIBRARIES := libxml2
 LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libc++ libicuuc libicui18n libbinder libutils
 LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE := thermald
+LOCAL_PROPRIETARY_MODULE := true
 LOCAL_INIT_RC := thermald.rc
 include $(BUILD_EXECUTABLE)
